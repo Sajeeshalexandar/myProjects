@@ -16,15 +16,22 @@
             width: 100%;
             height: 100%;
         }
-        
-        
+        .main-container{
+            box-shadow: 0px 0px 10px gray;
+            width:502px ;
+            height:351px ;
+            background-color: aliceblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     .container{
         display: grid;
         grid-template-columns:repeat(4,1fr);
         grid-template-rows: repeat(8,1fr);
-        gap: .4px;
+        gap: 1px;
         width:100%;
-        height: 100%;
+        height: ;
         
         margin: auto 0px;
         
@@ -64,6 +71,7 @@
         
 
     }
+
     .one{
         font-family: Verdana;
         color: white;
@@ -99,7 +107,6 @@
     .form-box{
         padding: 20px 5px 0px 5px;
         margin: 0px auto;
-        margin-bottom: 10px;
         border: 0px;
         width: 90%;
         height:156px;
@@ -117,22 +124,10 @@
         border-radius: 5px;
         padding: 5px 0px 5px 20px;
     }
-    .three:hover,.four:hover{
-        transform: scale(1.07,1.07);
-    }
     .three::placeholder,.four::placeholder{
         color: rgb(0, 130, 190);
         font-size: smaller;
         font-family:Verdana, Geneva, Tahoma, sans-serif;
-    }
-    a:link{
-        color: rgb(0, 130, 190);
-    }
-    a:active{
-        color: red;
-    }
-    a:visited{
-        color: blue;
     }
     .form-box .check,.para1{
         display: inline-block;
@@ -158,12 +153,6 @@
         font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
         color: white;
     }
-    .btn:hover{
-        
-        transform: scale(1.2,1.2);
-        background: linear-gradient(45deg,rgb(4, 175, 255),black);
-        box-shadow: 0px 0px 5px white;
-    }
     .footer .foot{
         color: white;
         font-size: 5px;
@@ -177,7 +166,7 @@
     
 </head>
 <body>
-    
+    <div class="main-container">
 
         <div class="container">
         <div class="header">
@@ -211,7 +200,7 @@
     </div>
 
 
-    
+    </div>
     
 </body>
 </html>
