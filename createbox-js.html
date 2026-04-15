@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>javascript</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		div{
+			width: 100px;
+			height: 100px;
+			background-color: yellow;
+			margin: 10px 2px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border-radius: 1rem;
+			animation: spin infinite linear 1.5s;
+			
+		}
+		@keyframes spin{
+			0%{
+				border-radius: .5rem;
+			}
+			
+			50%{
+				border-radius: 5rem;
+				background-color: greenyellow;
+			}
+			100%{
+				border-radius: .5rem;
+				
+			}
+
+		}
+		#sec{
+			background-color:cornflowerblue;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-wrap: wrap;
+		}
+		button{
+			display: inline-block;
+			width: 100px;
+			color: rgb(0, 78, 127);
+			height: 30px;
+			background-color: cornflowerblue;
+			border: none;
+			border-radius: .5rem;
+			margin: 2rem 1rem;
+			box-shadow: 4px 4px 10px rgba(136, 177, 253, 0.942),
+						-4px -4px 10px rgba(0, 0, 0, 0.359);
+		}
+	</style>
+</head>
+<body>
+	<section id="sec">
+		<button id="btn1">Create box</button>
+		<button id="btn2">Remove box</button>
+		<button id="btn3">Box count</button>
+	</section>
+	
+	<script>
+		let sec = document.getElementById("sec");
+		let btn1 = document.getElementById("btn1");
+		let words = "boxes"
+		let count = 1;
+		
+		btn1.addEventListener("click",function(){
+			let box = document.createElement("div");
+			let text = document.createTextNode(words+count++);
+			
+			box.appendChild(text);
+			sec.appendChild(box);
+		});
+
+		let btn2 = document.getElementById("btn2");
+
+		btn2.addEventListener("click",function(){
+			sec.removeChild(sec.lastChild,count--);
+		})
+		let btn3 = document.getElementById("btn3");
+		btn3.addEventListener("click",function(){
+			alert(count-1);
+			
+		})
+
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>paraExtracting</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            height: 100vh;
+            width: 100%;
+            background-color:cadetblue;
+        }
+        html{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #sec{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 20rem;
+        }
+        .heading{
+            width: 100%;
+            padding: 2rem 0rem;
+            display: flex;
+            justify-content: space-around;
+        }
+        .heading button{
+            padding: .3rem 1rem;
+            background-color: cadetblue;
+            border-radius: .8rem;
+            border: none;
+            box-shadow: 0px 0px 10px 0px rgb(85, 223, 223);
+            color: white;
+        }
+         span{
+            color: white;
+        }
+        .home-img{
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            padding: .5rem 0;
+            
+        }
+        .home-img img{
+            border-radius: 3rem;
+            border: 3px solid white;
+            box-shadow: 0px 0px 10px 0px rgb(85, 223, 223);
+        }
+        .home-content #para{
+            color: rgb(39, 39, 39);
+        }
+        .home-content{
+            padding: 0 10rem;
+        }
+        @media (max-width:600px){
+            #sec{
+                padding: 0 3rem;
+            }
+            .home-img img{
+                width: 200px;
+                height: 250px;
+            }
+            .home-content{
+                padding: 0 2rem;
+            }
+
+        }
+        @media (max-width:1100px){
+            #sec{
+                padding: 0 5rem;
+            }
+            .home-img img{
+                width: 250px;
+                height: 300px;
+            }
+            .home-content{
+                padding: 0 10rem;
+            }
+
+        }
+        
+    </style>
+</head>
+<body>
+    <Section id="sec">
+        <div class="heading">
+            <h1>Personal <span>Detials</span></h1>
+            <button id="btn">For Data</button>
+        </div>
+        <div class="home-img">
+            <img src="/IMAGES/girl.jpg" width="300px" height="350px" alt="girl image">
+            <h3>Aarathi IPS</h3>
+        </div>
+        <div class="home-content">
+            <p id="para">
+                Aarathi is a IPS offices who currently working on the chennai district tamil nadu.
+                his passion was to becoming a doctor.thus she is trying for LLB to become a lawyer and to fly the planes and helicopter through space.
+            </p>
+        </div>
+    </Section>
+    
+
+
+
+
+    <script>
+        let btn = document.querySelector("#btn");
+        let para = document.querySelector("#para");
+
+        btn.addEventListener("click",function(){
+            let text = para.innerText;
+            alert(text);
+        })
+
+    </script>
+</body>
+</html>
