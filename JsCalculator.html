@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JsCalculator</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+        }
+        html{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .keyboard button{
+            width: 4rem;
+            height: 3rem;
+            border-radius: 3rem;
+            border: none;
+            color: white;
+            background-color:rgb(85, 85, 85);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto;
+            cursor: pointer;
+        
+        }
+        .keyboard button:hover{
+            background-color:rgb(112, 112, 112) ;
+        }
+        .keyboard{
+            width: 50vh;
+            padding: 1rem;
+            gap: 1rem;
+            border-radius: 1rem;
+            background-color: black;
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            
+        }
+        .screen{
+            width: 100%;
+            height: 5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        
+        #display{
+            display: inline-block;
+            width: 90%;
+            height: 4rem;
+            
+            margin: 0 auto;
+        } 
+        .calculator{
+            background-color: black;
+            padding: 1rem .5rem .3rem;
+            border-radius: 1rem;
+        }
+       
+    </style>
+</head>
+
+<body>
+    <div class="calculator">
+        <div class="screen">
+            <input id="display" readonly value="57+6">
+        </div>
+        <div class="keyboard">
+            <button onclick="addToDisplay('+')" style="background-color: orange;">+</button>
+            <button onclick="addToDisplay('7')">7</button>
+            <button onclick="addToDisplay('8')">8</button>
+            <button onclick="addToDisplay('9')">9</button>
+            <button onclick="addToDisplay('-')" style="background-color: orange;">-</button>
+            <button onclick="addToDisplay('4')">4</button>
+            <button onclick="addToDisplay('5')">5</button>
+            <button onclick="addToDisplay('6')">6</button>
+            <button onclick="addToDisplay('*')" style="background-color: orange;">*</button>
+            <button onclick="addToDisplay('1')">1</button>
+            <button onclick="addToDisplay('2')">2</button>
+            <button onclick="addToDisplay('3')">3</button>
+            <button onclick="addToDisplay('/')" style="background-color: orange;">/</button>
+            <button onclick="addToDisplay('0')">0</button>
+            <button onclick="addToDisplay('.')">.</button>
+
+            <button onclick="calculate()">=</button>
+            <button onclick="clearScreen()" style="background-color: orange;">C</button>
+        </div>
+
+    </div>
+
+
+    <script>
+        var display = document.querySelector("#display");
+
+
+        
+
+
+        
+    </script>
+</body>
+
+</html>
