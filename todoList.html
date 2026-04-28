@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * {
             margin: 0;
@@ -55,6 +58,7 @@
 
         .todo-container input::placeholder {
             color: black;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         #btn {
@@ -66,15 +70,99 @@
             box-shadow: 1px 2px 1px 0px gray;
         }
 
+        /* TASK AREA CONTAINER */
         #taskArea {
-            width: auto;
-            height: auto;
-            background-color: rgb(255, 220, 156);
-            padding: .8rem 1rem;
-            margin: .5rem 0;
-            border-radius: 1rem;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 1.2rem;
 
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        }
 
+        /* INDIVIDUAL TASK */
+        #taskArea p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 0.7rem 1rem;
+            border-radius: 0.8rem;
+
+            background: linear-gradient(135deg, #ffffff, #f1f1f1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #333;
+
+            transition: all 0.3s ease;
+        }
+
+        /* HOVER EFFECT */
+        #taskArea p:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        /* BUTTON CONTAINER (OPTIONAL BUT BETTER) */
+        .task-buttons {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        /* BUTTON BASE STYLE */
+        .btnStyle {
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+            transition: all 0.25s ease;
+
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* DELETE BUTTON */
+        .delete-btn {
+            color: #ff4d4d;
+        }
+
+        .delete-btn:hover {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        /* COMPLETE BUTTON */
+        .complete-btn {
+            color: #28c76f;
+        }
+
+        .complete-btn:hover {
+            background: #28c76f;
+            color: white;
+        }
+
+        /* COMPLETED TASK STYLE */
+        .completed {
+            text-decoration: line-through;
+            color: #2e7d32;
+        }
+
+        .task-done-bg {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb) !important;
         }
     </style>
 </head>
@@ -86,9 +174,12 @@
                 <h1>Todo<Span>List</Span></h1>
             </div>
             <div class="add-content">
-                <input type="text" placeholder="Enter tasks" id="input-task">
+                <input type="text" placeholder="Enter your task..." id="input-task">
                 <button id="btn">Add</button>
-                <div id="taskArea"></div>
+                <div id="taskArea">
+
+
+                </div>
             </div>
         </div>
     </section>
@@ -98,25 +189,55 @@
     <script>
 
         let btn = document.querySelector("#btn");
-        
 
         btn.addEventListener("click", function () {
+            let inputField = document.getElementById("input-task");
+            let input = inputField.value.trim(); // important
+            let taskArea = document.querySelector("#taskArea");
 
-            var input = document.querySelector("#input-task").value;
-            var textArea = document.querySelector("#textArea");
+            if (input === "") {
+                alert("Please enter a task");
+                return;
+            }
 
-            let box = document.createElement("div");
-            let text = document.createTextNode(input);
+            // CREATE TASK
+            let task = document.createElement("p");
+
+            let taskText = document.createElement("span");
+            taskText.textContent = input;
+            task.appendChild(taskText);
+            // BUTTON CONTAINER
+            let btnContainer = document.createElement("div");
+            btnContainer.classList.add("task-buttons");
+
+            // COMPLETE BUTTON
+            let cmpBtn = document.createElement("button");
+            cmpBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+            cmpBtn.classList.add("btnStyle", "complete-btn");
+
+            cmpBtn.addEventListener("click", () => {
+                taskText.classList.toggle("completed");   // only text
+                task.classList.toggle("task-done-bg");    // full row background
+            });
+            // DELETE BUTTON
+            let delBtn = document.createElement("button");
+            delBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            delBtn.classList.add("btnStyle", "delete-btn");
+
+            delBtn.addEventListener("click", () => {
+                task.remove(); 
+            });
 
             
-            box.appendChild(text);
-            textArea.appendChild(box)
+            btnContainer.appendChild(cmpBtn);
+            btnContainer.appendChild(delBtn);
 
-            
+            task.appendChild(btnContainer);
+            taskArea.appendChild(task);
 
-
-
-        })
+            // CLEAR INPUT
+            inputField.value = "";
+        });
     </script>
 
 </body>
