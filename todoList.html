@@ -164,6 +164,117 @@
         .task-done-bg {
             background: linear-gradient(135deg, #d4edda, #c3e6cb) !important;
         }
+
+     
+
+        /* Tablets (≤ 1024px) */
+        @media (max-width: 1024px) {
+
+            .todo-container {
+                padding: 1.8rem 2rem;
+                width: 90%;
+            }
+
+            .todo-container h1 {
+                font-size: 1.8rem;
+            }
+
+            .todo-container input {
+                width: 100%;
+            }
+
+            #btn {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+
+            .add-content {
+                display: flex;
+                gap: 0.5rem;
+
+                flex-direction: column;
+            }
+
+        }
+
+
+
+        /* Mobile (≤ 600px) */
+        @media (max-width: 600px) {
+
+            #todo-section {
+                padding: 1rem;
+            }
+
+            .todo-container {
+                width: 100%;
+                padding: 1.5rem 1rem;
+                border-radius: 1.2rem;
+            }
+
+            .todo-container h1 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            /* Input + Button stacked */
+            .add-content {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .todo-container input {
+                width: 100%;
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+
+            #btn {
+                width: 100%;
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+
+            /* Task item */
+            #taskArea p {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            /* Buttons move below text */
+            .task-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .btnStyle {
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+
+        /* Small mobile (≤ 400px) */
+        @media (max-width: 400px) {
+
+            .todo-container h1 {
+                font-size: 1.3rem;
+            }
+
+            .todo-container input {
+                font-size: 0.85rem;
+            }
+
+            #btn {
+                font-size: 0.85rem;
+            }
+
+            #taskArea {
+                padding: 0.6rem;
+            }
+        }
     </style>
 </head>
 
@@ -225,10 +336,10 @@
             delBtn.classList.add("btnStyle", "delete-btn");
 
             delBtn.addEventListener("click", () => {
-                task.remove(); 
+                task.remove();
             });
 
-            
+
             btnContainer.appendChild(cmpBtn);
             btnContainer.appendChild(delBtn);
 
