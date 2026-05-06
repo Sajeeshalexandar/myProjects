@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>timers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        html {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            background-color: azure;
+        }
+
+        #message {
+            font-weight: 700;
+            font-size: large;
+            color: rgb(0, 164, 229);
+        }
+
+        #msgBox {
+            width: 300px;
+            height: 100px;
+            box-shadow: 0px 0px 10px 0px rgb(191, 191, 191);
+            border-radius: 1rem;
+            position: absolute;
+            right: 2rem;
+            bottom: 5rem;
+            text-align: center;
+            padding: 2rem 0;
+            display: none;
+
+
+
+        }
+
+        #close {
+            position: absolute;
+            right: .5rem;
+            top: .5rem;
+            width: 2rem;
+            border: 0;
+            background-color: transparent;
+            color: red;
+            font-size: larger;
+            font-weight: bolder;
+
+        }
+
+        #close:hover {
+            transform: scale(1.1);
+            color: rgb(162, 0, 0);
+        }
+    </style>
+</head>
+
+<body>
+    <span id="message">Showing ads in 5 seconds...</span>
+    <p>Five star ads</p>
+
+
+    <div class="ads-box" id="msgBox">
+        <button id="close">X</button>
+        <div>Eat five star do nothing </div>
+    </div>
+
+
+    <script>
+        var message = document.getElementById("message");
+        var msgBox = document.getElementById("msgBox");
+        function showAds() {
+
+            message.style.display = "none"
+
+
+            msgBox.style.display = "block"
+
+        }
+
+        const timer = setTimeout(showAds, 5000)
+
+        var closebtn = document.getElementById("close");
+
+
+        closebtn.addEventListener("click", () => {
+            msgBox.style.display = "none"
+        })
+
+    </script>
+</body>
+
+</html>

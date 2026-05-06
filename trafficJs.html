@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic light</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(90deg, rgb(0, 134, 212), rgb(0, 162, 255), rgb(45, 178, 255), rgb(88, 194, 255));
+            width: 100%;
+            height: 100vh;
+            overflow-y: hidden;
+        }
+
+        .container {
+            width: 30rem;
+            height: 47rem;
+            background-color: transparent;
+            padding-top: 3rem;
+
+
+        }
+
+        .post {
+            width: 35%;
+            height: 60%;
+            background: linear-gradient(180deg, black);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+            border-radius: 3rem;
+            border: 5px solid rgb(218, 218, 218);
+            margin: 0 auto;
+            box-shadow: 0px 0px 15px 0px rgb(0, 0, 0);
+
+
+
+        }
+
+        .green {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(101, 101, 101, 0.389);
+            border-radius: 50%;
+            transition: .3s ease-in;
+
+
+        }
+
+        .yellow {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(101, 101, 101, 0.389);
+            border-radius: 50%;
+            transition: .3s ease-in;
+
+
+
+        }
+
+        .red {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(101, 101, 101, 0.389);
+            border-radius: 50%;
+            transition: .3s ease-in;
+
+        }
+
+        .stand {
+            background-color: rgb(218, 218, 218);
+            border: 2px solid;
+            width: 1.5rem;
+            height: 20rem;
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            z-index: -1;
+            translate: -50% -50%;
+
+        }
+
+        span {
+            font-size: xx-large;
+            font-weight: bolder;
+            color: rgb(0, 68, 137);
+
+        }
+
+        .container button {
+            padding: .6rem 1.5rem;
+            margin-left: .5rem;
+            margin-bottom: 2rem;
+            border-radius: 1rem;
+            border: none;
+            background-color: rgb(255, 94, 158);
+            font-weight: bold;
+            color: whitesmoke;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+        }
+
+        #lightBtn {
+            border: 2px solid rgb(255, 94, 158);
+            background-color: white;
+            color: rgb(255, 94, 158);
+        }
+        #policeBtn:hover{
+            background-color: white;
+            color:rgb(255, 94, 158) ;
+        }
+
+        #lightBtn:hover {
+            border: 1px solid rgb(255, 255, 255);
+            background-color: rgb(255, 94, 158);
+            color:white;
+        }
+
+        #trafficLight {
+            display: none;
+            width: 100%;
+            height: 100%;
+
+        }
+
+        .pop {
+            width: 500px;
+            height: 300px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0px 0px 15px 0px rgb(255, 255, 255);
+            color: rgb(255, 94, 158);
+            position: absolute;
+            border-radius: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: xx-large;
+            font-weight: bolder;
+
+        }
+
+        .closeButton {
+
+            position: absolute;
+            right: 1.5rem;
+            top: 1rem;
+            color: red;
+            font-weight: bolder;
+            font-size: x-large;
+            border: 0;
+            background-color: transparent;
+
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <span>what will use when traffic occurs..?</span><button id="lightBtn">Traffic Light</button><button
+            id="policeBtn">Call police</button>
+        <div id="trafficLight">
+            <div class="post">
+                <div class="green" id="greenLight"></div>
+                <div class="yellow" id="orangeLight"></div>
+                <div class="red" id="redLight"></div>
+            </div>
+            <div class="stand"></div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+
+        var trafficLight = document.getElementById("trafficLight");
+        var lightBtn = document.getElementById("lightBtn");
+
+
+        lightBtn.addEventListener("click", () => {
+            trafficLight.style.display = "block";
+
+            var green = document.getElementById("greenLight");
+            var orange = document.getElementById("orangeLight");
+            var red = document.getElementById("redLight");
+
+            function startGreen() {
+                green.style.backgroundColor = "rgb(29, 195, 0)";
+                green.style.boxShadow = "0px 0px 30px 10px rgb(29, 195, 0)";
+            }
+            function startOrange() {
+                orange.style.backgroundColor = "orange";
+                orange.style.boxShadow = "0px 0px 30px 10px orange";
+            }
+            function startRed() {
+                red.style.backgroundColor = "red";
+                red.style.boxShadow = "0px 0px 30px 10px red";
+            }
+
+            const greenTimer = setTimeout(startGreen, 3000);
+            const orangeTimer = setTimeout(startOrange, 6000);
+            const redTimer = setTimeout(startRed, 9000);
+        })
+
+
+        var policeBtn = document.getElementById("policeBtn");
+
+        policeBtn.addEventListener("click", () => {
+
+
+            var msgBox = document.createElement("div");
+            msgBox.classList.add("pop");
+
+            var para = document.createElement("p");
+            var message = "Calling Police </br> +91 8967543576..!";
+            para.innerHTML = message;
+
+            var closeBtn = document.createElement("button");
+            closeBtn.classList.add("closeButton");
+            closeBtn.innerText = "X"
+
+            msgBox.appendChild(closeBtn);
+            msgBox.appendChild(para);
+            document.body.appendChild(msgBox);
+
+            closeBtn.addEventListener("click", () => {
+                msgBox.style.display = "none"
+            })
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
