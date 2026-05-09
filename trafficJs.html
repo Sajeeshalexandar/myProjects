@@ -25,6 +25,7 @@
             width: 100%;
             height: 100vh;
             overflow-y: hidden;
+            overflow-x: hidden;
         }
 
         .container {
@@ -37,15 +38,15 @@
         }
 
         .post {
-            width: 35%;
-            height: 60%;
+            width: 20%;
+            height: 40%;
             background: linear-gradient(180deg, black);
             display: flex;
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
             padding: 20px;
-            border-radius: 3rem;
+            border-radius: 2rem;
             border: 5px solid rgb(218, 218, 218);
             margin: 0 auto;
             box-shadow: 0px 0px 15px 0px rgb(0, 0, 0);
@@ -55,8 +56,8 @@
         }
 
         .green {
-            width: 100px;
-            height: 100px;
+            width: 50px;
+            height: 50px;
             background-color: rgba(101, 101, 101, 0.389);
             border-radius: 50%;
             transition: .3s ease-in;
@@ -65,8 +66,8 @@
         }
 
         .yellow {
-            width: 100px;
-            height: 100px;
+            width: 50px;
+            height: 50px;
             background-color: rgba(101, 101, 101, 0.389);
             border-radius: 50%;
             transition: .3s ease-in;
@@ -76,8 +77,8 @@
         }
 
         .red {
-            width: 100px;
-            height: 100px;
+            width: 50px;
+            height: 50px;
             background-color: rgba(101, 101, 101, 0.389);
             border-radius: 50%;
             transition: .3s ease-in;
@@ -87,8 +88,8 @@
         .stand {
             background-color: rgb(218, 218, 218);
             border: 2px solid;
-            width: 1.5rem;
-            height: 20rem;
+            width: 1rem;
+            height: 50rem;
             position: absolute;
             top: 80%;
             left: 50%;
@@ -122,15 +123,16 @@
             background-color: white;
             color: rgb(255, 94, 158);
         }
-        #policeBtn:hover{
+
+        #policeBtn:hover {
             background-color: white;
-            color:rgb(255, 94, 158) ;
+            color: rgb(255, 94, 158);
         }
 
         #lightBtn:hover {
             border: 1px solid rgb(255, 255, 255);
             background-color: rgb(255, 94, 158);
-            color:white;
+            color: white;
         }
 
         #trafficLight {
@@ -170,10 +172,210 @@
 
 
         }
+
+        
+
+       
+
+        /* ROAD */
+        .road {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            background: #333;
+        }
+
+        .road::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: repeating-linear-gradient(to right,
+                    white 0 40px,
+                    transparent 40px 80px);
+            transform: translateY(-50%);
+        }
+
+        /* CAR */
+        .car {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            z-index: 2;
+
+            width: 420px;
+            height: 160px;
+            animation: move infinite 5s linear;
+            animation-timing-function: running;
+        }
+
+        /* Car Body */
+        .body {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            height: 90px;
+            background: #e53935;
+            border-radius: 25px 40px 15px 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Top */
+        .top {
+            position: absolute;
+            top: 10px;
+            left: 90px;
+            width: 220px;
+            height: 70px;
+            background: #d32f2f;
+            border-radius: 40px 40px 0 0;
+        }
+
+        /* Windows */
+        .window {
+            position: absolute;
+            top: 18px;
+            width: 90px;
+            height: 40px;
+            background: #bbdefb;
+            border: 4px solid #222;
+        }
+
+        .front-window {
+            left: 118px;
+            border-radius: 20px 5px 5px 5px;
+        }
+
+        .back-window {
+            left: 215px;
+            border-radius: 5px 20px 5px 5px;
+        }
+
+        /* Wheels */
+        .wheel {
+            position: absolute;
+            bottom: -5px;
+            width: 80px;
+            height: 80px;
+            background: #111;
+            border-radius: 50%;
+            border: 8px solid #666;
+            animation: spin 2s linear infinite;
+        }
+
+        .wheel::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            background: #999;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .front-wheel {
+            left: 55px;
+        }
+
+        .back-wheel {
+            right: 55px;
+        }
+
+        /* Headlight */
+        .light {
+            position: absolute;
+            right: -8px;
+            top: 48px;
+            width: 20px;
+            height: 12px;
+            background: yellow;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 0 15px yellow;
+        }
+
+        /* Smoke */
+        .smoke {
+            position: absolute;
+            left: -20px;
+            top: 45px;
+            width: 15px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            animation: smoke 2s infinite;
+        }
+
+        .smoke:nth-child(2) {
+            left: -40px;
+            animation-delay: 0.5s;
+        }
+
+        .smoke:nth-child(3) {
+            left: -60px;
+            animation-delay: 1s;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes smoke {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-50px) scale(2);
+                opacity: 0;
+            }
+        }
+
+
+        @keyframes move {
+            0%{
+                transform: translateX(-1000px);
+            }
+            100%{
+                transform: translateX(1500px);
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div class="car" id="carMove">
+
+        <div class="smoke"></div>
+        <div class="smoke"></div>
+        <div class="smoke"></div>
+
+        <div class="top"></div>
+
+        <div class="body"></div>
+
+        <div class="window front-window"></div>
+        <div class="window back-window"></div>
+
+        <div class="light"></div>
+
+        <div class="wheel front-wheel"></div>
+        <div class="wheel back-wheel"></div>
+
+    </div>
+
+    <div class="road"></div>
 
     <div class="container">
         <span>what will use when traffic occurs..?</span><button id="lightBtn">Traffic Light</button><button
@@ -199,6 +401,9 @@
 
         lightBtn.addEventListener("click", () => {
             trafficLight.style.display = "block";
+
+            var carMove = document.getElementById("carMove");
+            carMove.style.animation = "none"
 
             var green = document.getElementById("greenLight");
             var orange = document.getElementById("orangeLight");
@@ -241,28 +446,13 @@
 
             msgBox.appendChild(closeBtn);
             msgBox.appendChild(para);
-            document.body.appendChild(msgBox);
-
+            document.body.appendChild(msgBox)
+            lightBtn.disabled = true;
             closeBtn.addEventListener("click", () => {
-                msgBox.style.display = "none"
+                msgBox.style.display = "none";
+                   lightBtn.disabled = false;
             })
         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     </script>
 </body>
