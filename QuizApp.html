@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1A2980 0%, #26D0CE 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
+            padding: 1rem;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .quizApp {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+            padding: 3rem 2.5rem;
+            text-align: center;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .quizApp h1 {
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .quizApp h1::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: #26D0CE;
+            bottom: -10px;
+            left: 25%;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(38, 208, 206, 0.5);
+        }
+
+        .questionPlace {
+            text-align: left;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .answerPlace {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            width: 100%;
+        }
+
+        .ans {
+            width: 100%;
+            padding: 1.2rem 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ans:hover:not([disabled]) {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #26D0CE;
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .ans:active:not([disabled]) {
+            transform: translateX(5px);
+        }
+
+        .ans[disabled] {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .nextBtn,
+        .playagain {
+            padding: 1rem 3.5rem;
+            border-radius: 30px;
+            border: none;
+            background: #26D0CE;
+            color: #1A2980;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(38, 208, 206, 0.3);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: none;
+        }
+
+        .nextBtn:hover,
+        .playagain:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(38, 208, 206, 0.4);
+            background: #ffffff;
+        }
+
+        .nextBtn:active,
+        .playagain:active {
+            transform: translateY(2px);
+            box-shadow: 0 5px 10px rgba(38, 208, 206, 0.3);
+        }
+
+        .correct {
+            background: rgba(46, 213, 115, 0.3) !important;
+            border-color: #2ed573 !important;
+            color: #2ed573 !important;
+            animation: pulse 0.5s ease;
+        }
+
+        .incorrect {
+            background: rgba(255, 71, 87, 0.3) !important;
+            border-color: #ff4757 !important;
+            color: #ff4757 !important;
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .result-container {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .result-container h2 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-container p {
+            color: #eee;
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-container b {
+            color: #26D0CE;
+            font-size: 1.8rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="quizApp" id="quizApp">
+        <h1>Quiz App</h1>
+        <div class="questionPlace">Questions will appear here</div>
+        <div class="answerPlace">
+        </div>
+        <button class="nextBtn">Next Question</button>
+        <button class="playagain">Play Again</button>
+    </div>
+
+    <script>
+        var Questions = [
+            {
+                question: "Who is the most handsome boy?",
+                answers: [
+                    { text: "Sajeesh" },
+                    { text: "Vijay" },
+                    { text: "surya" },
+                    { text: "arathi" }
+                ],
+                correct: "Sajeesh"
+            },
+            {
+                question: "Who is bad girl?",
+                answers: [
+                    { text: "abitha" },
+                    { text: "renjini" },
+                    { text: "nagu" },
+                    { text: "arathi" }
+                ],
+                correct: "abitha"
+            },
+            {
+                question: "Which is the makeup girl?",
+                answers: [
+                    { text: "ishu" },
+                    { text: "nagu" },
+                    { text: "ishunagu" },
+                    { text: "naguishu" }
+                ],
+                correct: "ishu"
+            },
+            {
+                question: "Nickname of the pooja?",
+                answers: [
+                    { text: "maaku" },
+                    { text: "maakaan" },
+                    { text: "makaachi" },
+                    { text: "thavala" }
+                ],
+                correct: "makaachi"
+            }
+        ];
+
+        const questionPlace = document.querySelector(".questionPlace");
+        const answerPlace = document.querySelector(".answerPlace");
+        const nextBtn = document.querySelector(".nextBtn");
+        const playAgain = document.querySelector(".playagain");
+
+        var currentQuestion = 0;
+        var score = 0;
+
+        function startQuiz() {
+            answerPlace.innerHTML = "";
+            playAgain.style.display = "none";
+            nextBtn.style.display = "none";
+            questionPlace.style.display = "block";
+            
+            let ques = Questions[currentQuestion];
+            questionPlace.textContent = `${currentQuestion + 1}. ${ques.question}`;
+
+            ques.answers.forEach((ans) => {
+                var ansbtn = document.createElement("button");
+                ansbtn.classList.add("ans");
+                ansbtn.textContent = ans.text;
+                answerPlace.appendChild(ansbtn);
+
+                ansbtn.addEventListener("click", () => {
+                    nextBtn.style.display = "inline-block";
+
+                    // Disable all buttons once an answer is selected
+                    const allButtons = document.querySelectorAll(".ans");
+                    allButtons.forEach((btn) => {
+                        btn.disabled = true;
+                        
+                        // Automatically show the correct answer
+                        if (btn.textContent === ques.correct) {
+                            btn.classList.add("correct");
+                        }
+                    });
+
+                    // Check if the clicked answer is correct
+                    if (ansbtn.textContent === ques.correct) {
+                        score++;
+                    } else {
+                        ansbtn.classList.add("incorrect");
+                    }
+                });
+            });
+        }
+
+        function showResults() {
+            nextBtn.style.display = "none";
+            questionPlace.style.display = "none";
+            answerPlace.innerHTML = `
+                <div class="result-container">
+                    <h2>Quiz Completed! 🎉</h2>
+                    <p>Your score is <b>${score}</b> out of ${Questions.length}</p>
+                </div>
+            `;
+            playAgain.style.display = "inline-block";
+        }
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestion++;
+            if (currentQuestion < Questions.length) {
+                startQuiz();
+            } else {
+                showResults();
+            }
+        });
+
+        playAgain.addEventListener("click", () => {
+            score = 0;
+            currentQuestion = 0;
+            startQuiz();
+        });
+
+        // Initialize quiz
+        startQuiz();
+
+    </script>
+</body>
+
+</html>
