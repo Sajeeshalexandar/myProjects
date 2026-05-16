@@ -55,34 +55,28 @@
 
         }
 
-        .green {
+        .lights {
             width: 50px;
             height: 50px;
             background-color: rgba(101, 101, 101, 0.389);
             border-radius: 50%;
             transition: .3s ease-in;
-
 
         }
 
-        .yellow {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(101, 101, 101, 0.389);
-            border-radius: 50%;
-            transition: .3s ease-in;
-
-
-
+        .green.active {
+            background-color: greenyellow;
+            transition: 0.3s ease;
         }
 
-        .red {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(101, 101, 101, 0.389);
-            border-radius: 50%;
-            transition: .3s ease-in;
+        .yellow.active {
+            background-color: orange;
+            transition: 0.3s ease;
+        }
 
+        .red.active {
+            background-color: red;
+            transition: 0.3s ease;
         }
 
         .stand {
@@ -173,9 +167,9 @@
 
         }
 
-        
 
-       
+
+
 
         /* ROAD */
         .road {
@@ -208,7 +202,9 @@
 
             width: 420px;
             height: 160px;
-            animation: move infinite 5s linear;
+            animation: infinite linear;
+            animation-duration: 5s;
+            animation-name: move;
             animation-timing-function: running;
         }
 
@@ -320,6 +316,9 @@
             animation-delay: 1s;
         }
 
+
+
+
         @keyframes spin {
             from {
                 transform: rotate(0deg);
@@ -344,18 +343,77 @@
 
 
         @keyframes move {
-            0%{
+            0% {
                 transform: translateX(-1000px);
             }
-            100%{
+
+            100% {
                 transform: translateX(1500px);
             }
+        }
+
+        @keyframes startEngine {
+            0% {
+                transform: translateY(-10px) scale(1.01);
+
+            }
+
+            10% {
+                transform: translateY(-6px) scale(1);
+
+            }
+
+            20% {
+                transform: translateY(-10px) scale(1.01);
+
+            }
+
+            30% {
+                transform: translateY(-6px) scale(1);
+
+            }
+
+            40% {
+                transform: translateY(-10px) scale(1.01);
+
+            }
+
+            50% {
+                transform: translateY(-6px) scale(1);
+
+            }
+
+            60% {
+                transform: translateY(-10px) scale(1.01);
+
+            }
+
+            70% {
+                transform: translateY(-6px) scale(1);
+
+            }
+
+            80% {
+                transform: translateY(-10px) scale(1.01);
+
+            }
+
+            90% {
+                transform: translateY(-6px) scale(1);
+
+            }
+
+            100% {
+                transform: translateY(-10px) scale(1.01);
+
+            }
+
         }
     </style>
 </head>
 
 <body>
-    <div class="car" id="carMove">
+    <div class="car" id="car">
 
         <div class="smoke"></div>
         <div class="smoke"></div>
@@ -382,9 +440,9 @@
             id="policeBtn">Call police</button>
         <div id="trafficLight">
             <div class="post">
-                <div class="green" id="greenLight"></div>
-                <div class="yellow" id="orangeLight"></div>
-                <div class="red" id="redLight"></div>
+                <div class="red lights" id="redLight"></div>
+                <div class="yellow lights" id="orangeLight"></div>
+                <div class="green lights" id="greenLight"></div>
             </div>
             <div class="stand"></div>
         </div>
@@ -397,35 +455,57 @@
 
         var trafficLight = document.getElementById("trafficLight");
         var lightBtn = document.getElementById("lightBtn");
+        var car = document.getElementById("car");
+
+        var green = document.getElementById("greenLight");
+        var orange = document.getElementById("orangeLight");
+        var red = document.getElementById("redLight");
+
 
 
         lightBtn.addEventListener("click", () => {
-            trafficLight.style.display = "block";
+                trafficLight.style.display = "block";
 
-            var carMove = document.getElementById("carMove");
-            carMove.style.animation = "none"
+                function startTraffic() {
 
-            var green = document.getElementById("greenLight");
-            var orange = document.getElementById("orangeLight");
-            var red = document.getElementById("redLight");
+            
+                turnOffLight();
+                red.classList.add("active");
+                car.style.animation = "none"
 
-            function startGreen() {
-                green.style.backgroundColor = "rgb(29, 195, 0)";
-                green.style.boxShadow = "0px 0px 30px 10px rgb(29, 195, 0)";
-            }
-            function startOrange() {
-                orange.style.backgroundColor = "orange";
-                orange.style.boxShadow = "0px 0px 30px 10px orange";
-            }
-            function startRed() {
-                red.style.backgroundColor = "red";
-                red.style.boxShadow = "0px 0px 30px 10px red";
-            }
 
-            const greenTimer = setTimeout(startGreen, 3000);
-            const orangeTimer = setTimeout(startOrange, 6000);
-            const redTimer = setTimeout(startRed, 9000);
+                setTimeout(() => {
+                    turnOffLight();
+                    orange.classList.add("active");
+                    car.style.animationName = "startEngine"
+                    car.style.animationDuration = "3s"
+
+
+
+                }, 3000);
+                setTimeout(() => {
+                    turnOffLight();
+                    green.classList.add("active");
+                    car.style.animationName = "move"
+                    car.style.animationDuration = "5s"
+
+                }, 6000);
+            
+
+        }
+        startTraffic();
+        setInterval(startTraffic,9000);
+
         })
+        
+
+        function turnOffLight() {
+            red.classList.remove("active");
+            orange.classList.remove("active");
+            green.classList.remove("active");
+        }
+
+
 
 
         var policeBtn = document.getElementById("policeBtn");
@@ -450,7 +530,7 @@
             lightBtn.disabled = true;
             closeBtn.addEventListener("click", () => {
                 msgBox.style.display = "none";
-                   lightBtn.disabled = false;
+                lightBtn.disabled = false;
             })
         })
 
