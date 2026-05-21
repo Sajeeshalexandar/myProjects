@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket Simulation</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            background-color: #0b0f19;
+            background-image:
+              radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 4px),
+              radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+              radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+              radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+            background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+            background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 12vh;
+            background: linear-gradient(to bottom, #2b2b2b, #1a1a1a);
+            border-top: 4px solid #444;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
+            z-index: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            height: 100vh;
+            background-color: transparent;
+            position: relative;
+            z-index: 5;
+        }
+
+        .rocket {
+            position: absolute;
+            bottom: calc(12vh + 10px);
+            left: 50%;
+            translate: -50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-right: .8rem;
+            padding-bottom: 1.6rem;
+            z-index: 10;
+            will-change: transform;
+        }
+
+        .rocket img {
+            width: 100px;
+            height: auto;
+            filter: drop-shadow(0px 5px 15px rgba(0,0,0,0.6));
+        }
+
+        /* Engine fire */
+        .rocket::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 60px;
+            background: radial-gradient(ellipse at top, #fff 0%, #ffea00 20%, #ff5e00 60%, transparent 100%);
+            border-radius: 50% 50% 20% 20%;
+            filter: blur(2px);
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: -1;
+        }
+
+        .rocket.rocketLaunch::after {
+            opacity: 1;
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scaleY(1); }
+            100% { transform: translateX(-50%) scaleY(1.3); }
+        }
+
+        .rocketShake {
+            animation: shake 0.1s infinite cubic-bezier(0.36, 0.07, 0.19, 0.97);
+        }
+
+        .rocketLaunch {
+            animation: launch 4s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px) rotate(-1deg); }
+            50% { transform: translateX(3px) rotate(1deg); }
+            75% { transform: translateX(-3px) rotate(-1deg); }
+        }
+
+        @keyframes launch {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-150vh); }
+        }
+
+        .rocketBase {
+            width: 220px;
+            height: 30px;
+            background: linear-gradient(to right, #4a4a4a, #6b6b6b, #4a4a4a);
+            border-radius: 8px 8px 0 0;
+            position: absolute;
+            bottom: 12vh;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 12;
+            border-bottom: 5px solid #222;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.6);
+        }
+
+        /* Launch Tower */
+        .rocketBase::after {
+            content: '';
+            position: absolute;
+            bottom: 30px;
+            right: 20px;
+            width: 24px;
+            height: 160px;
+            background: repeating-linear-gradient(
+                45deg,
+                #333,
+                #333 10px,
+                #8b0000 10px,
+                #8b0000 20px
+            );
+            border: 2px solid #222;
+            border-bottom: none;
+            z-index: -1;
+        }
+
+        /* Tower support arm */
+        .rocketBase::before {
+            content: '';
+            position: absolute;
+            bottom: 120px;
+            right: 44px;
+            width: 40px;
+            height: 10px;
+            background: #555;
+            border: 2px solid #222;
+            z-index: -1;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .smoke {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(255,165,0,0.9) 0%, rgba(255,69,0,0.8) 30%, rgba(100,100,100,0.8) 60%, rgba(50,50,50,0) 100%);
+            border-radius: 50%;
+            bottom: -20px;
+            opacity: 0;
+            filter: blur(4px);
+            z-index: 15;
+            pointer-events: none;
+            display: none;
+        }
+
+        .smoking {
+            animation: smokeMove 1.5s ease-out infinite;
+            display: block;
+        }
+
+        .smoke1 { left: 20px; --smoke-x: -150px; animation-delay: 0s; }
+        .smoke2 { left: 60px; --smoke-x: -80px; animation-delay: 0.2s; }
+        .smoke3 { right: 60px; --smoke-x: 80px; animation-delay: 0.1s; }
+        .smoke4 { right: 20px; --smoke-x: 150px; animation-delay: 0.3s; }
+
+        @keyframes smokeMove {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 1;
+            }
+            40% {
+                background: radial-gradient(circle, rgba(200,200,200,0.9) 0%, rgba(100,100,100,0.8) 50%, rgba(50,50,50,0) 100%);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(20px) scale(5) translateX(var(--smoke-x));
+                opacity: 0;
+            }
+        }
+
+        #launchBtn {
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #e52d27, #b31217);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 2px solid #ff4b2b;
+            cursor: pointer;
+            position: fixed;
+            bottom: 4vh;
+            left: 50%;
+            translate: -50%;
+            box-shadow: 0 10px 20px rgba(229, 45, 39, 0.4), inset 0 2px 5px rgba(255,255,255,0.3);
+            transition: all 0.2s;
+            z-index: 100;
+            width: 180px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #launchBtn:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 10px rgba(229, 45, 39, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ground"></div>
+    
+    <div class="container">
+        <div class="rocket">
+            <img src="/IMAGES/rocket.png" alt="Rocket">
+        </div>
+        <div class="rocketBase">
+            <div class="smoke smoke1"></div>
+            <div class="smoke smoke2"></div>
+            <div class="smoke smoke3"></div>
+            <div class="smoke smoke4"></div>
+        </div>
+    </div>
+
+    <button id="launchBtn">Launch</button>
+
+    <script>
+        $(document).ready(function () {
+
+            function launch() {
+                $(".rocket").addClass("rocketLaunch")
+            }
+            function smoking() {
+                $(".smoke").addClass("smoking")
+            }
+            function removeSmoking() {
+                $(".smoke").removeClass("smoking")
+            }
+            function rocketShake(){
+                $(".rocket").addClass("rocketShake");
+            }
+
+
+
+            function countDown5(){
+                $("#launchBtn").text("5")
+            }
+            function countDown4(){
+                $("#launchBtn").text("4")
+            }
+            function countDown3(){
+                $("#launchBtn").text("3")
+            }
+            function countDown2(){
+                $("#launchBtn").text("2")
+            }
+            function countDown1(){
+                $("#launchBtn").text("1")
+            }
+            function countDownGo(){
+                $("#launchBtn").text("Go")
+            }
+
+
+
+            $("#launchBtn").click(function () {
+                
+                setTimeout(countDown5,0)
+                setTimeout(countDown4,1000)
+                setTimeout(countDown3,2000)
+                setTimeout(countDown2,3000)
+                setTimeout(countDown1,4000)
+                setTimeout(countDownGo,5000)
+
+
+                setTimeout(launch, 5000);
+                smoking()
+                setTimeout(removeSmoking, 7000);
+                setTimeout(rocketShake,2000);
+            })
+
+        })
+    </script>
+
+</body>
+</html>
