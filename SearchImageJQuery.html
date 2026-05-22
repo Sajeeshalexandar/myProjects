@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nature Explorer</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<style>
+  :root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --bg-color: #0f172a;
+    --surface: #1e293b;
+    --text: #f8fafc;
+  }
+
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 2rem;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .header h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.025em;
+  }
+
+  .header p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    font-weight: 300;
+  }
+
+  .search-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 4rem;
+    background: var(--surface);
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    border-radius: 100px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    width: 100%;
+    max-width: 550px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+  
+  .search-container:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    border-color: rgba(99, 102, 241, 0.5);
+  }
+
+  #userInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 1.1rem;
+    outline: none;
+  }
+
+  #userInput::placeholder {
+    color: #64748b;
+  }
+
+  #btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.875rem 2rem;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+  }
+
+  #btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(99, 102, 241, 0.4);
+  }
+
+  #btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    justify-content: center;
+  }
+
+  .imagebox {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    animation: imageReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    position: relative;
+    cursor: pointer;
+    background: var(--surface);
+  }
+  
+  .imagebox::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1.5rem;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .imagebox:nth-child(1) { animation-delay: 0.1s; }
+  .imagebox:nth-child(2) { animation-delay: 0.2s; }
+  .imagebox:nth-child(3) { animation-delay: 0.3s; }
+
+  .imagebox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+    filter: brightness(0.9);
+  }
+
+  .imagebox:hover img {
+    transform: scale(1.08);
+    filter: brightness(1.1);
+  }
+
+  .error-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes imageReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>
+
+<body>
+  <div class="header">
+    <h1>Nature Explorer</h1>
+    <p>Search for fish, animal, or bird to see beautiful images</p>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="userInput" placeholder="Enter fish, animal or bird..." autocomplete="off">
+    <button id="btn">Search</button>
+  </div>
+  
+  <div class="container">
+    <!-- Results will appear here -->
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      
+      function handleSearch() {
+        var userInput = $("#userInput").val().toLowerCase().trim();
+        
+        
+        setTimeout(function() {
+          if (userInput === "animal") {
+            $(".container").html(
+              `<div class="imagebox"><img src="https://www.rd.com/wp-content/uploads/2023/05/GettyImages-1341465008.jpg" alt="Animal 1"></div>
+               <div class="imagebox"><img src="https://betterwithcats.net/wp-content/uploads/2022/08/cat-is-laying-on-a-old-wooden-table.jpg" alt="Animal 2"></div>
+               <div class="imagebox"><img src="https://media-manager.starsinsider.com/gallery/1080/na_5bfc04a12322b.jpg" alt="Animal 3"></div>`
+            );
+          } else if (userInput === "bird") {
+            $(".container").html(
+              `<div class="imagebox"><img src="https://img.freepik.com/premium-photo/photography-birds-their-natural-habitats-with-different-species_883586-15016.jpg" alt="Bird 1"></div>
+               <div class="imagebox"><img src="https://i.natgeofe.com/n/5fa649ee-33e6-4767-af84-2333ada1ce1c/mountain-chickadee_3x2.jpg" alt="Bird 2"></div>
+               <div class="imagebox"><img src="https://animal-pedia.org/wp-content/uploads/2025/01/birds-habitat.webp" alt="Bird 3"></div>`
+            );
+          } else if (userInput === "fish") {
+            $(".container").html(
+              `<div class="imagebox"><img src="https://www.coralrealm.com/wp-content/uploads/2021/04/the-butterflyfish.jpg" alt="Fish 1"></div>
+               <div class="imagebox"><img src="https://as2.ftcdn.net/v2/jpg/05/60/35/27/1000_F_560352738_QmPnl0GLueRHxh16jOZb0qyW9KGcg2IP.jpg" alt="Fish 2"></div>
+               <div class="imagebox"><img src="https://wallpapers.com/images/hd/4k-fish-2m4426djg6efi6cw.jpg" alt="Fish 3"></div>`
+            );
+          } else if (userInput !== "") {
+            $(".container").html(
+              `<div class="error-msg">No results found for "<b>${userInput}</b>". Try 'animal', 'bird', or 'fish'.</div>`
+            );
+          }
+        }, 50);
+      }
+
+      $("#btn").click(function () {
+        handleSearch();
+      });
+
+    });
+  </script>
+</body>
+
+</html>
