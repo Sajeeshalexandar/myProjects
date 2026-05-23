@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balloon Pop Game</title>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(skyblue, white);
+            height: 100vh;
+        }
+
+        /* Game Area */
+        .gameArea {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Score Board */
+        .scoreBoard {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 25px;
+            font-weight: bold;
+            z-index: 100;
+        }
+
+        /* Timer */
+        .timerBoard {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 25px;
+            font-weight: bold;
+            z-index: 100;
+        }
+
+        /* Start Screen */
+        .startScreen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            z-index: 200;
+        }
+
+        .box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .box h1 {
+            margin-bottom: 20px;
+        }
+
+        .box button {
+            padding: 12px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            background: crimson;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Balloon */
+        .balloon {
+            width: 80px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -120px;
+            cursor: pointer;
+        }
+
+        /* Balloon String */
+        .balloon::after {
+            content: "";
+            width: 2px;
+            height: 40px;
+            background: black;
+            position: absolute;
+            left: 50%;
+            bottom: -40px;
+        }
+
+        /* Balloon Animation */
+        @keyframes moveUp {
+
+            0% {
+                bottom: -120px;
+                transform: translateX(0px);
+            }
+
+            25% {
+                transform: translateX(-20px);
+            }
+
+            50% {
+                transform: translateX(20px);
+            }
+
+            75% {
+                transform: translateX(-10px);
+            }
+
+            100% {
+                bottom: 110%;
+                transform: translateX(10px);
+            }
+        }
+
+        /* Pop Effect */
+        .pop {
+            animation: popAnim 0.2s forwards !important;
+        }
+
+        @keyframes popAnim {
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+   
+    <div class="scoreBoard">Score :<span id="score">0</span></div>
+
+   
+    <div class="timerBoard">Time :<span id="time">20</span></div>
+
+   
+    <div class="startScreen">
+        <div class="box">
+            <h1>Balloon Pop Game</h1>
+            <button id="startBtn">
+                Start Game
+            </button>
+        </div>
+    </div>
+
+
+    <div class="gameArea"></div>
+
+    <script>
+
+        $(document).ready(function () {
+
+            var score = 0;
+            var timeLeft = 10;
+
+            var balloonInterval;
+            var timerInterval;
+
+            var gameRunning = false;
+            $("#startBtn").click(function () {
+
+
+                score = 0;
+                timeLeft = 10;
+
+                $("#score").text(score);
+                $("#time").text(timeLeft);
+                $(".gameArea").empty();
+
+                gameRunning = true;
+
+                $(".startScreen").fadeOut();
+
+                balloonInterval = setInterval(function () {
+
+                    generateBalloon();
+
+                }, 700);
+
+                timerInterval = setInterval(function () {
+
+                    timeLeft--;
+
+                    $("#time").text(timeLeft);
+
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+
+                }, 1000);
+
+            });
+
+            $(".gameArea").on("click", ".balloon", function () {
+                if (!gameRunning) {
+                    return;
+                }
+
+                score++;
+                $("#score").text(score);
+                $(this).addClass("pop");
+                $(this).hide();
+               
+            });
+
+            
+            function generateBalloon() {
+            
+                var colors = ["red", "blue", "green","orange","purple","pink", "yellow"];
+                var randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                var randomLeft = Math.random() * ($(window).width() - 100);
+
+                var randomSpeed =Math.random() * 3 + 4;
+              
+                var balloon = $("<div class='balloon'></div>");
+                
+                balloon.css({
+                    left: randomLeft + "px",
+                    background: randomColor,
+                    animation:"moveUp " + randomSpeed + "s linear forwards"
+                });
+
+               
+                $(".gameArea").append(balloon);
+                setTimeout(function () {
+                    balloon.remove();
+                }, randomSpeed * 1000);
+            }
+
+    
+            function endGame() {
+
+                gameRunning = false;
+
+                clearInterval(balloonInterval);
+                clearInterval(timerInterval);
+                $(".startScreen").fadeIn();
+                $(".box h1").html("Game Over <br><br> Score : " + score);
+                $("#startBtn").text("Play Again");
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
