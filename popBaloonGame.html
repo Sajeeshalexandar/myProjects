@@ -140,10 +140,15 @@
 
         /* Pop Effect */
         .pop {
-            animation: popAnim 0.2s forwards !important;
+            animation: popAnim 1s forwards !important;
+            transition: 1s ease ;
         }
 
         @keyframes popAnim {
+            0%{
+                transition: scale(1);
+                opacity: 1;
+            }
             100% {
                 transform: scale(1.5);
                 opacity: 0;
@@ -178,7 +183,7 @@
         $(document).ready(function () {
 
             var score = 0;
-            var timeLeft = 10;
+            var timeLeft = 20;
 
             var balloonInterval;
             var timerInterval;
@@ -188,7 +193,7 @@
 
 
                 score = 0;
-                timeLeft = 10;
+                timeLeft = 20;
 
                 $("#score").text(score);
                 $("#time").text(timeLeft);
@@ -202,7 +207,7 @@
 
                     generateBalloon();
 
-                }, 700);
+                }, 2000);
 
                 timerInterval = setInterval(function () {
 
