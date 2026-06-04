@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+    font-family: Arial;
+    text-align: center;
+}
+
+.game-board{
+    width: 440px;
+    margin: 20px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.card{
+    width: 100px;
+    height: 100px;
+    background: #3498db;
+    color: white;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.card.flipped{
+    background: #2ecc71;
+}
+#para{
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    padding: .5rem 2rem;
+    border-radius: 1rem;
+    background-color: #3498db86;
+    backdrop-filter: blur(5px);
+}
+
+     
+    </style>
+</head>
+
+<body>
+
+    <h1>Memory Card Game</h1>
+
+    <div class="game-board"></div>
+
+    <p id="result"></p>
+
+    <p  id="para">Score <span id="screen">0</span></p>
+
+
+    <script>
+        $(document).ready(function(){
+
+    let values = ['A','A','B','B','C','C','D','D'];
+
+    values.sort(() => Math.random() - 0.5);
+    
+    values.forEach(function(value){
+        $('.game-board').append(
+            `<div class="card" data-value="${value}">?</div>`
+        );
+    });
+
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let matches = 0;
+    let score = 0;
+
+    $('.game-board').on('click', '.card', function(){
+
+        if(lockBoard) return;
+
+        if($(this).hasClass('flipped')) return;
+
+        $(this).addClass('flipped').text($(this).data('value'));
+
+        if(firstCard === null){
+            firstCard = $(this);
+        }
+        else{
+            secondCard = $(this);
+            lockBoard = true;
+
+            if(firstCard.data('value') === secondCard.data('value')){
+
+                matches++;
+                score++;
+                $("#screen").text(score)
+                firstCard = null;
+                secondCard = null;
+                lockBoard = false;
+
+                if(matches === 4){
+                    $('#result').text(`🎉 You Win!\nYour Score is${score}`);
+                    
+                }
+            }
+            else{
+
+                setTimeout(function(){
+
+                    firstCard
+                        .removeClass('flipped')
+                        .text('?');
+
+                    secondCard
+                        .removeClass('flipped')
+                        .text('?');
+
+                    firstCard = null;
+                    secondCard = null;
+                    lockBoard = false;
+
+                }, 1000);
+            }
+        }
+    });
+
+});
+
+    </script>
+</body>
+
+</html>
